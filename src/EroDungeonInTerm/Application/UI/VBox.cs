@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EroDungeonInTerm.Rendering;
+namespace EroDungeonInTerm.Application.UI;
 
 public class VBox : UIElement
 {

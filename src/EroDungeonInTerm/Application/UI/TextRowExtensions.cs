@@ -1,4 +1,4 @@
-﻿namespace EroDungeonInTerm.Rendering;
+﻿namespace EroDungeonInTerm.Application.UI;
 
 public static class TextRowExtensions
 {

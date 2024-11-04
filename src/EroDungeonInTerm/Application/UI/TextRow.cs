@@ -1,4 +1,4 @@
-﻿namespace EroDungeonInTerm.Rendering;
+﻿namespace EroDungeonInTerm.Application.UI;
 
 public readonly struct TextRow
 {

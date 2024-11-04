@@ -7,8 +7,4 @@
 		<NoWarn>$(NoWarn);IDE0290;IDE0301</NoWarn>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Folder Include="Application\UI\" />
-	</ItemGroup>
-
 </Project>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EroDungeonInTerm.Rendering;
+using System;
 using System.Collections.Concurrent;
 using System.Threading;
 
@@ -25,9 +26,12 @@ public class Game : IDisposable
 	public void Run()
 	{
 		Console.CursorVisible = false;
+		Console.WindowWidth = 180;
+		Console.WindowHeight = 55;
 
 		state = GameState.Running;
 		inputThread.Start();
+		MatrixRender render = new(55, 180);
 		do
 		{
 			// Prevent using `Console.Clear()` to better performance.
@@ -43,6 +47,7 @@ public class Game : IDisposable
 
 				currentScene?.OnInput(input);
 			}
+
 		}
 		while (state == GameState.Running);
 	}
@@ -66,10 +71,5 @@ public class Game : IDisposable
 	{
 		Console.CursorVisible = true;
 		Console.ResetColor();
-	}
-
-	private static char[][] CreateMatrix(uint columns, uint rows)
-	{
-		
 	}
 }

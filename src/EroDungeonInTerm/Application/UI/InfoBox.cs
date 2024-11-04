@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Security.Cryptography;
+using EroDungeonInTerm.Application.UI;
 
 namespace EroDungeonInTerm.Rendering;
 
@@ -60,7 +61,7 @@ public partial class InfoBox : UIElement
 		}
 	}
 
-	public void Draw(char[][] renderBox)
+	public override void Draw(char[][] renderBox)
 	{
 		GetSize(out uint width, out uint height);
 
@@ -161,7 +162,7 @@ public partial class InfoBox : UIElement
 		}
 	}
 
-	public void GetSize(out uint width, out uint height)
+	public override void GetSize(out uint width, out uint height)
 	{
 		width = 0;
 		height = 0;
