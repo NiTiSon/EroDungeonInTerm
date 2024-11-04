@@ -10,7 +10,7 @@ namespace EroDungeonInTerm.Application;
 
 public class Game : IDisposable
 {
-	public const double RenderFrequency = 0.5;
+	public const double RenderFrequency = 1d / 8d; // 8 Frames per second
 
 	private readonly ConcurrentQueue<InputEvent> inputEvents;
 	private readonly Thread inputThread;
@@ -40,7 +40,7 @@ public class Game : IDisposable
 		
 		currentScene = new(this);
 		Character anatoly = new(Race.Human, Sex.Male, "Anatoly", new BaseStats());
-		currentScene.Root = new VBox([anatoly.GetInfo(), anatoly.GetInfo()]);
+		Character ceresa = new(Race.Human, Sex.Female, "Ceresa", new BaseStats() { Attack = 19, MaxHealth = 221, CriticalChance = 0.88f });
 
 		long lastTimestamp = 0;
 		do
@@ -51,9 +51,15 @@ public class Game : IDisposable
 				{
 					state = GameState.Closed;
 				}
+				else if (input.Info.Key == ConsoleKey.D)
+				{
+					ceresa.Hit(20);
+				}
 
 				currentScene?.OnInput(input);
 			}
+
+			currentScene!.Root = new HBox([anatoly.GetInfo(), ceresa.GetInfo()]);
 
 			if (Stopwatch.GetElapsedTime(lastTimestamp).TotalSeconds >= RenderFrequency)
 			{

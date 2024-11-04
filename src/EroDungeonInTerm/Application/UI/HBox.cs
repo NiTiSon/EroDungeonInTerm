@@ -3,20 +3,19 @@ using System.Collections.Generic;
 
 namespace EroDungeonInTerm.Application.UI;
 
-public class VBox : UIElement
+public class HBox : UIElement
 {
 	private readonly List<UIElement> elements;
-	private readonly HorizontalAlignment alignment;
+	private readonly VerticalAlignment alignment;
 
-	public VBox()
+	public HBox()
 	{
 		elements = new(4);
 	}
 
-	public VBox(IEnumerable<UIElement> elements)
+	public HBox(IEnumerable<UIElement> elements)
 	{
 		this.elements = new(elements);
-		this.elements.ForEach(el => el.Parent = this);
 	}
 
 	public void Add(UIElement element)
@@ -39,15 +38,15 @@ public class VBox : UIElement
 	public override void Draw(Render render)
 	{
 		GetSize(out uint width, out uint height);
-		uint verticalPointer = 0;
+		uint horizontalPointer = 0;
 		for (int i = 0; i < elements.Count; i++)
 		{
 			UIElement element = elements[i];
 			element.GetSize(out uint elementWidth, out uint elementHeight);
 
-			element.Draw(render.Slice(verticalPointer, 0, elementHeight, elementWidth));
+			element.Draw(render.Slice(0, horizontalPointer, elementHeight, elementWidth));
 
-			verticalPointer += elementHeight;
+			horizontalPointer += elementWidth;
 		}
 	}
 
@@ -59,8 +58,8 @@ public class VBox : UIElement
 		{
 			UIElement element = elements[i];
 			element.GetSize(out uint elementWidth, out uint elementHeight);
-			width = uint.Max(width, elementWidth);
-			height += elementHeight;
+			height = uint.Max(height, elementHeight);
+			width += elementWidth;
 		}
 	}
 }

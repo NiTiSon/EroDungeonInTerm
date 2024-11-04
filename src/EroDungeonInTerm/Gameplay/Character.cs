@@ -26,6 +26,25 @@ public class Character : ISavable<Character>
 		this.health = stats.MaxHealth;
 	}
 
+	public void Hit(uint damage)
+	{
+		if (damage == 0)
+		{
+			Hit(1);
+		}
+
+		if (damage < stats.Defense)
+		{
+			damage = 1;
+		}
+		else
+		{
+			damage -= stats.Defense;
+		}
+
+		health -= uint.Min(health, damage); // Preventing underflowing
+	}
+
 	public InfoBox GetInfo()
 	{
 		return new InfoBox(
@@ -38,7 +57,7 @@ public class Character : ISavable<Character>
 				$"hp: {health}/{stats.MaxHealth}",
 				$"def: {stats.Defense}",
 				$"atk: {stats.Attack}",
-				$"crt: {stats.CriticalChance * 100:0.##}% +{stats.CriticalDamage * 100:0.##}",
+				$"crt: {stats.CriticalChance * 100:0.##}% +{stats.CriticalDamage * 100:0.##}%",
 				$"spd: {stats.Speed}"
 				),
 			]
