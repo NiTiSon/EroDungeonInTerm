@@ -1,6 +1,8 @@
-﻿namespace EroDungeonInTerm.Gameplay;
+﻿using System.IO;
 
-public class Character
+namespace EroDungeonInTerm.Gameplay;
+
+public class Character : ISavable<Character>
 {
 	private Race race;
 	private string name;
@@ -15,5 +17,18 @@ public class Character
 		this.race = race;
 		this.name = name;
 		this.stats = stats;
+	}
+
+	public static Character Load(BinaryReader save)
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public void Save(BinaryWriter save)
+	{
+		save.Write((byte)1); // The save format version used for backward-compatibility
+
+		save.Write((byte)race);
+		save.WriteUtf8(name);
 	}
 }
