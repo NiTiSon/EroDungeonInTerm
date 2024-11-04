@@ -19,10 +19,19 @@ public sealed class MatrixRender : Render
 		}
 	}
 
+	public void Flush()
+	{
+		for (uint row = 0; row < matrix.Length; row++)
+		{
+			Console.WriteLine(matrix[row]);
+		}
+	}
+
 	public override void Place(uint row, uint column, char ch)
 	{
 		ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(row, RowsCount);
 		ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(column, ColumnsCount);
+		
 		matrix[row][column] = ch;
 	}
 

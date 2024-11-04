@@ -9,6 +9,12 @@ public sealed class Scene
 
 	private UIElement? root;
 
+	public UIElement? Root
+	{
+		get => root;
+		set => root = value;
+	}
+
 	public Scene(Game game)
 	{
 		this.game = game;
@@ -21,6 +27,6 @@ public sealed class Scene
 
 	public void Draw(Render render)
 	{
-
+		root?.Draw(render);
 	}
 }
