@@ -1,6 +1,6 @@
 ﻿namespace EroDungeonInTerm.Application.UI;
 
-public enum TextAlign
+public enum HorizontalAlignment
 {
 	Left = 0,
 	Center = 1,

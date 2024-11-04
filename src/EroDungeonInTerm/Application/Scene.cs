@@ -1,8 +1,13 @@
-﻿namespace EroDungeonInTerm.Application;
+﻿using EroDungeonInTerm.Application.UI;
+using EroDungeonInTerm.Rendering;
+
+namespace EroDungeonInTerm.Application;
 
 public sealed class Scene
 {
 	private readonly Game game;
+
+	private UIElement? root;
 
 	public Scene(Game game)
 	{
@@ -10,6 +15,11 @@ public sealed class Scene
 	}
 
 	public void OnInput(InputEvent input)
+	{
+
+	}
+
+	public void Draw(Render render)
 	{
 
 	}

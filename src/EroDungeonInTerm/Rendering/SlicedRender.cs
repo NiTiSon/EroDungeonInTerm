@@ -17,12 +17,12 @@ internal sealed class SlicedRender : Render
 		this.width = width;
 	}
 
-	public override void Place(char ch, uint row, uint column)
+	public override void Place(uint row, uint column, char ch)
 	{
 		ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(row, height);
 		ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(column, width);
 		
-		render.Place(ch, offsetRow + row, offsetColumn + column);
+		render.Place(offsetRow + row, offsetColumn + column, ch);
 	}
 
 	public override Render Slice(uint row, uint column, uint height, uint width)

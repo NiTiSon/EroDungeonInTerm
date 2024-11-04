@@ -3,15 +3,15 @@
 public readonly struct TextRow
 {
 	public readonly string Text;
-	public readonly TextAlign Align;
+	public readonly HorizontalAlignment Align;
 
-	public static readonly TextRow Empty = new(string.Empty, TextAlign.Left);
+	public static readonly TextRow Empty = new(string.Empty, HorizontalAlignment.Left);
 
 	public TextRow() : this(string.Empty) { }
 
-	public TextRow(string text) : this(text, TextAlign.Left) { }
+	public TextRow(string text) : this(text, HorizontalAlignment.Left) { }
 
-	public TextRow(string text, TextAlign align)
+	public TextRow(string text, HorizontalAlignment align)
 	{
 		Text = text;
 		Align = align;

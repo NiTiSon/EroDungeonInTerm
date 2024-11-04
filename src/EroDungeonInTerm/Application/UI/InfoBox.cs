@@ -1,7 +1,6 @@
-﻿using System;
+﻿using EroDungeonInTerm.Application.UI;
+using System;
 using System.Collections.Immutable;
-using System.Security.Cryptography;
-using EroDungeonInTerm.Application.UI;
 
 namespace EroDungeonInTerm.Rendering;
 
@@ -61,104 +60,88 @@ public partial class InfoBox : UIElement
 		}
 	}
 
-	public override void Draw(char[][] renderBox)
+	public override void Draw(Render render)
 	{
 		GetSize(out uint width, out uint height);
 
-		int verticalPointer = 0;
+		uint verticalPointer = 0;
 
 		// Title
-		renderBox[verticalPointer][0] = '┌';
-		DrawAlign(renderBox[verticalPointer], Title, '─', 1, 1);
-		renderBox[verticalPointer][width - 1] = '┐';
+		render.Place(verticalPointer, 0, '┌');
+		DrawAlign(render, verticalPointer, width, Title, '─', 1, 1);
+		render.Place(verticalPointer, width - 1, '┐');
 		verticalPointer++;
 
 		// Main section rows
 		for (int i = 0; i < MainSection.Rows.Length; i++)
 		{
-			renderBox[verticalPointer][0] = '│';
-			renderBox[verticalPointer][width - 1] = '│';
-			DrawRow(renderBox[verticalPointer], MainSection.Rows[i], Padding.Left + 1, Padding.Right + 1);
+			render.Place(verticalPointer, 0, '│');
+			render.Place(verticalPointer, width - 1, '│');
+			DrawRow(render, verticalPointer, width, MainSection.Rows[i], Padding.Left + 1, Padding.Right + 1);
 			verticalPointer++;
 		}
 
 		// Sections
 		for (int i = 0; i < Sections.Length; i++)
 		{
-			renderBox[verticalPointer][0] = '├';
-			DrawAlign(renderBox[verticalPointer], Sections[i].Title, '─', 1, 1);
-			renderBox[verticalPointer][width - 1] = '┤';
+			render.Place(verticalPointer, 0, '├');
+			DrawAlign(render, verticalPointer, width, Sections[i].Title, '─', 1, 1);
+			render.Place(verticalPointer, width - 1, '┤');
 			verticalPointer++;
 
 			for (int j = 0; j < Sections[i].Rows.Length; j++)
 			{
-				renderBox[verticalPointer][0] = '│';
-				renderBox[verticalPointer][width - 1] = '│';
-				DrawRow(renderBox[verticalPointer], Sections[i].Rows[j], Padding.Left + 1, Padding.Right + 1);
+				render.Place(verticalPointer, 0, '│');
+				render.Place(verticalPointer, width - 1, '│');
+				DrawRow(render, verticalPointer, width, Sections[i].Rows[j], Padding.Left + 1, Padding.Right + 1);
 				verticalPointer++;
 			}
 		}
 
 		// Footer
-		renderBox[verticalPointer][0] = '└';
-		for (int i = 1; i < width -1; i++)
+		render.Place(verticalPointer, 0, '└');
+		for (uint i = 1; i < width -1; i++)
 		{
-			renderBox[verticalPointer][i] = '─';
+			render.Place(verticalPointer, i, '─');
 		}
-		renderBox[verticalPointer][width - 1] = '┘';
-
-		for (int i = 0; i < height; i++)
-		{
-			for (int j = 0; j < width; j++)
-			{
-				if (renderBox[i][j] == '\0')
-				{
-#if DEBUG
-					renderBox[i][j] = '░'; // For debugging purposes
-#else
-					renderBox[i][j] = ' ';
-#endif
-				}
-			}
-		}
+		render.Place(verticalPointer, width - 1, '┘');
 	}
 
-	private void DrawRow(char[] place, TextRow text, uint paddingLeft, uint paddingRight)
+	private void DrawRow(Render render, uint row, uint rowLength, TextRow text, uint paddingLeft, uint paddingRight)
 	{
-		DrawAlign(place, text, ' ', paddingLeft, paddingRight);
+		DrawAlign(render, row, rowLength, text, ' ', paddingLeft, paddingRight);
 	}
 
-	private void DrawAlign(char[] place, TextRow text, char filler, uint paddingLeft, uint paddingRight)
+	private void DrawAlign(Render render, uint row, uint rowLength, TextRow text, char filler, uint paddingLeft, uint paddingRight)
 	{
 		switch (text.Align)
 		{
-			case TextAlign.Left:
-				Copy(place, paddingLeft, text);
-				Array.Fill(place, filler, (int)(paddingLeft + text.Text.Length), (int)(place.Length - paddingLeft - text.Text.Length - paddingRight));
+			case HorizontalAlignment.Left:
+				Copy(render, row, paddingLeft, text);
+				render.FillLine(row, (uint)(paddingLeft + text.Text.Length), (uint)(rowLength - paddingLeft - text.Text.Length - paddingRight), filler);
 				break;
-			case TextAlign.Right:
-				Copy(place, (uint)(place.Length - paddingRight - text.Text.Length), text);
-				Array.Fill(place, filler, (int)(paddingLeft), (int)(place.Length - paddingLeft - paddingRight - text.Text.Length));
+			case HorizontalAlignment.Right:
+				Copy(render, row, (uint)(rowLength - paddingRight - text.Text.Length), text);
+				render.FillLine(row, paddingLeft, (uint)(rowLength - paddingLeft - paddingRight - text.Text.Length), filler);
 				break;
-			case TextAlign.Center:
+			case HorizontalAlignment.Center:
 				uint leftMost = paddingLeft;
-				uint rightMost = (uint)(place.Length - paddingRight);
+				uint rightMost = (uint)(rowLength - paddingRight);
 				uint available = rightMost - leftMost;
 				uint padding = (uint)(available - text.Text.Length) / 2;
-				Array.Fill(place, filler, (int)leftMost, (int)available);
-				Copy(place, leftMost + padding, text);
+
+				render.FillLine(row, leftMost, available, filler);
+				Copy(render, row, leftMost + padding, text);
 				break;
 		}
 	}
 
-	private void Copy(char[] dst, uint dstIndex, string src)
+	private void Copy(Render render, uint row, uint dstIndex, string src)
 	{
 		int srcIndex = 0;
-		for (uint i = dstIndex; i < dst.Length; i++)
+		for (uint i = dstIndex; i < src.Length; i++)
 		{
-			if (srcIndex >= src.Length) break;
-
-			dst[i] = src[srcIndex++];
+			render.Place(row, i, src[srcIndex++]);
 		}
 	}
 
