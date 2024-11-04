@@ -1,4 +1,5 @@
-﻿using EroDungeonInTerm.Rendering;
+﻿using EroDungeonInTerm.Application;
+using EroDungeonInTerm.Rendering;
 
 namespace EroDungeonInTerm;
 
@@ -18,53 +19,53 @@ public static class Launcher
 
 		//	""");
 
-		
-		ConsoleKeyInfo key;
-		uint tick = 0;
-		do
+
+		//ConsoleKeyInfo key;
+		//uint tick = 0;
+		//do
+		//{
+		//	tick++;
+		//	InfoBox info = new("#" + tick, new Padding(1, 0, 1, 0), ["Katerine".Align(TextAlign.Center)],
+		//	[
+		//	new InfoBox.Section("Stats".Align(TextAlign.Center),
+		//		"health: 20/20",
+		//		"lust: 30%"
+		//	),
+		//	new InfoBox.Section("Equipment".Align(TextAlign.Center),
+		//		"Head: Iron Bucket",
+		//		"Torso: Iron Breastplate",
+		//		"Legs: None",
+		//		"Feet: None"
+		//	),
+		//	]);
+
+		//	info.GetSize(out uint w, out uint h);
+		//	char[][] buffer = CreateMatrix(w, h);
+		//	info.Draw(buffer);
+		//	for (int i = 0; i < buffer.Length; i++)
+		//	{
+		//		Console.Write(new string(buffer[i]));
+		//		Console.WriteLine();
+		//	}
+
+		//	Console.ForegroundColor = ConsoleColor.Black;
+		//	Console.BackgroundColor = ConsoleColor.Black;
+		//	key = Console.ReadKey();
+		//	Console.CursorLeft = 0;
+		//	Console.CursorTop = 0;
+		//	Console.ResetColor();
+		//}
+		//while (key.Key != ConsoleKey.Escape);
+
+		Game? game = null;
+		try
 		{
-			tick++;
-			InfoBox info = new("#" + tick, new Padding(1, 0, 1, 0), ["Katerine".Align(TextAlign.Center)],
-			[
-			new InfoBox.Section("Stats".Align(TextAlign.Center),
-				"health: 20/20",
-				"lust: 30%"
-			),
-			new InfoBox.Section("Equipment".Align(TextAlign.Center),
-				"Head: Iron Bucket",
-				"Torso: Iron Breastplate",
-				"Legs: None",
-				"Feet: None"
-			),
-			]);
-
-			info.GetSize(out uint w, out uint h);
-			char[][] buffer = CreateMatrix(w, h);
-			info.Draw(buffer);
-			for (int i = 0; i < buffer.Length; i++)
-			{
-				Console.Write(new string(buffer[i]));
-				Console.WriteLine();
-			}
-
-			Console.ForegroundColor = ConsoleColor.Black;
-			Console.BackgroundColor = ConsoleColor.Black;
-			key = Console.ReadKey();
-			Console.CursorLeft = 0;
-			Console.CursorTop = 0;
-			Console.ResetColor();
+			game = new Game();
+			game.Run();
 		}
-		while (key.Key != ConsoleKey.Escape);
-	}
-
-	private static char[][] CreateMatrix(uint w, uint h)
-	{
-		char[][] result = new char[h][];
-		for (int i = 0; i < h; i++)
+		finally
 		{
-			result[i] = new char[w];
+			game?.Dispose();
 		}
-
-		return result;
 	}
 }

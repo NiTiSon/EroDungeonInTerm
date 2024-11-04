@@ -1,4 +1,4 @@
-﻿namespace EroDungeonInTerm;
+﻿namespace EroDungeonInTerm.Game;
 
 public class Character
 {
