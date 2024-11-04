@@ -1,4 +1,5 @@
 ﻿using EroDungeonInTerm.Application.UI;
+using EroDungeonInTerm.Gameplay;
 using EroDungeonInTerm.Rendering;
 using System;
 using System.Collections.Concurrent;
@@ -37,18 +38,13 @@ public class Game : IDisposable
 		state = GameState.Running;
 		inputThread.Start();
 		
-		currentScene = new(this)
-		{
-			Root = new InfoBox("Character: Anatoly", "Health".Align(HorizontalAlignment.Center))
-		};
+		currentScene = new(this);
+		Character anatoly = new(Race.Human, Sex.Male, "Anatoly", new BaseStats());
+		currentScene.Root = new VBox([anatoly.GetInfo(), anatoly.GetInfo()]);
 
 		long lastTimestamp = 0;
 		do
 		{
-			// Prevent using `Console.Clear()` to better performance.
-			Console.CursorLeft = 0;
-			Console.CursorTop = 0;
-
 			while (inputEvents.TryDequeue(out InputEvent input))
 			{
 				if (input.Info.Key == ConsoleKey.Escape)
@@ -63,7 +59,11 @@ public class Game : IDisposable
 			{
 				currentScene?.Draw(render);
 
+				Console.CursorLeft = 0;
+				Console.CursorTop = 0;
 				render.Flush();
+				Console.CursorLeft = 0;
+				Console.CursorTop = 0;
 
 				lastTimestamp = Stopwatch.GetTimestamp();
 			}

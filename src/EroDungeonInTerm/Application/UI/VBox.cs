@@ -1,11 +1,13 @@
 ﻿using EroDungeonInTerm.Rendering;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace EroDungeonInTerm.Application.UI;
 
 public class VBox : UIElement
 {
 	private readonly List<UIElement> elements;
+	private readonly HorizontalAlignment alignment;
 
 	public VBox()
 	{
@@ -29,7 +31,17 @@ public class VBox : UIElement
 
 	public override void Draw(Render render)
 	{
-		throw new System.NotImplementedException();
+		GetSize(out uint width, out uint height);
+		uint verticalPointer = 0;
+		for (int i = 0; i < elements.Count; i++)
+		{
+			UIElement element = elements[i];
+			element.GetSize(out uint elementWidth, out uint elementHeight);
+
+			element.Draw(render.Slice(verticalPointer, 0, elementHeight, elementWidth));
+
+			verticalPointer += elementHeight;
+		}
 	}
 
 	public override void GetSize(out uint width, out uint height)
