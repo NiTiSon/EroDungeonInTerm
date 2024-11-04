@@ -8,9 +8,13 @@ public class Game : IDisposable
 {
 	private readonly ConcurrentQueue<InputEvent> inputEvents;
 	private readonly Thread inputThread;
+	
 	private GameState state;
 
+	private Scene? currentScene;
+
 	public GameState State => state;
+
 
 	public Game()
 	{
@@ -35,8 +39,9 @@ public class Game : IDisposable
 				if (input.Info.Key == ConsoleKey.Escape)
 				{
 					state = GameState.Closed;
-					Console.WriteLine($"Push: {input}");
 				}
+
+				currentScene?.OnInput(input);
 			}
 		}
 		while (state == GameState.Running);
@@ -65,12 +70,6 @@ public class Game : IDisposable
 
 	private static char[][] CreateMatrix(uint columns, uint rows)
 	{
-		char[][] result = new char[rows][];
-		for (int i = 0; i < rows; i++)
-		{
-			result[i] = new char[columns];
-		}
-
-		return result;
+		
 	}
 }

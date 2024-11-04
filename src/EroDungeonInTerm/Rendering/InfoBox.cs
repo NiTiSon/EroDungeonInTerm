@@ -7,7 +7,7 @@ namespace EroDungeonInTerm.Rendering;
 /// <summary>
 /// UI element with title, rows and sections.
 /// </summary>
-public partial class InfoBox : IDrawable
+public partial class InfoBox : UIElement
 {
 	public readonly Section MainSection;
 	public readonly ImmutableArray<Section> Sections;
