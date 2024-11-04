@@ -5,7 +5,7 @@ using System.Net.NetworkInformation;
 
 namespace EroDungeonInTerm.Gameplay;
 
-public class Character : ISavable<Character>
+public class Character : ISavable<Character>, ILivingEntity
 {
 	private Race race;
 	private Sex sex;
@@ -26,13 +26,9 @@ public class Character : ISavable<Character>
 		this.health = stats.MaxHealth;
 	}
 
-	public void Hit(uint damage)
+	public uint TakeHit(in Hit hit)
 	{
-		if (damage == 0)
-		{
-			Hit(1);
-		}
-
+		uint damage = hit.Damage;
 		if (damage < stats.Defense)
 		{
 			damage = 1;
@@ -42,7 +38,19 @@ public class Character : ISavable<Character>
 			damage -= stats.Defense;
 		}
 
-		health -= uint.Min(health, damage); // Preventing underflowing
+		damage = uint.Min(health, damage); // Preventing underflowing
+		health -= damage;
+		return damage;
+	}
+
+	public uint TakeHeal(in Heal heal)
+	{
+		uint amount = heal.Amount;
+		uint lostHealth = stats.MaxHealth - health;
+
+		amount = uint.Min(lostHealth, amount);
+		health += amount;
+		return amount;
 	}
 
 	public InfoBox GetInfo()

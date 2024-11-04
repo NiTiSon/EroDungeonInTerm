@@ -38,7 +38,7 @@ public class Game : IDisposable
 		state = GameState.Running;
 		inputThread.Start();
 		
-		currentScene = new(this);
+		currentScene = new(this, 40, 140);
 		Character anatoly = new(Race.Human, Sex.Male, "Anatoly", new BaseStats());
 		Character ceresa = new(Race.Human, Sex.Female, "Ceresa", new BaseStats() { Attack = 19, MaxHealth = 221, CriticalChance = 0.88f });
 
@@ -53,7 +53,11 @@ public class Game : IDisposable
 				}
 				else if (input.Info.Key == ConsoleKey.D)
 				{
-					ceresa.Hit(20);
+					ceresa.TakeHit(new Hit(anatoly, 20));
+				}
+				else if (input.Info.Key == ConsoleKey.H)
+				{
+					ceresa.TakeHeal(new Heal(anatoly, 18));
 				}
 
 				currentScene?.OnInput(input);

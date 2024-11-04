@@ -3,9 +3,10 @@ using EroDungeonInTerm.Rendering;
 
 namespace EroDungeonInTerm.Application;
 
-public sealed class Scene
+public class Scene
 {
 	private readonly Game game;
+	private readonly uint rows, columns;
 
 	private UIElement? root;
 
@@ -15,9 +16,11 @@ public sealed class Scene
 		set => root = value;
 	}
 
-	public Scene(Game game)
+	public Scene(Game game, uint rows, uint columns)
 	{
 		this.game = game;
+		this.rows = rows;
+		this.columns = columns;
 	}
 
 	public void OnInput(InputEvent input)
