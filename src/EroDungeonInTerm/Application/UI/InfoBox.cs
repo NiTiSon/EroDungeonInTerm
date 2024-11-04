@@ -139,7 +139,7 @@ public partial class InfoBox : UIElement
 	private void Copy(Render render, uint row, uint dstIndex, string src)
 	{
 		int srcIndex = 0;
-		for (uint i = dstIndex; i < src.Length; i++)
+		for (uint i = dstIndex; srcIndex < src.Length; i++)
 		{
 			render.Place(row, i, src[srcIndex++]);
 		}
